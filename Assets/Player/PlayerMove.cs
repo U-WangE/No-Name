@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -24,7 +25,6 @@ public class PlayerMove : MonoBehaviour
         InputJump = false;
         InputLeft = false;
         keyup = false;
-
     }
 
     private void Update()
@@ -89,6 +89,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+
     // 오른쪽 화살표 터치
     public void RightDown()
     {
@@ -110,8 +111,6 @@ public class PlayerMove : MonoBehaviour
         InputLeft = false;
         keyup = true;
     }
-
-
 
     // Jump 관련
     void Jump()
