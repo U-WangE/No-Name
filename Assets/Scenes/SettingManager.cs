@@ -23,7 +23,6 @@ public class SettingManager : MonoBehaviour
             else
                 Setting.SetActive(true);
         }
-        Debug.Log(ButtonName);
 
 
         if (ButtonName == "btn_Menu")
