@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
 
-    public bool TimerActive = false;
+    public bool TimerActive = false;  // New Game 시 Timer 시작
 
     private void Awake()
     {

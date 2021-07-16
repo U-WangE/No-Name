@@ -10,24 +10,33 @@ public class StatsManager : MonoBehaviour
     [SerializeField] Image imageHp;
     [SerializeField] Image imageSp;
 
+    [SerializeField] Text textKill;
+
     PlayerStat Stat;
 
     // 최대 Hp Sp  
-    static float MaxHP = 5;
-    static float MaxSP = 5;
+    static float MaxHP = 5f;
+    static float MaxSP = 5f;
 
-    float currentHp = 5;
-    float currentSp = 5;
+    // 현재 Hp Sp
+    float currentHp = 5f;
+    float currentSp = 5f;
+
+    // Kill Count
+    int countKill = 0;
 
     // player stat 초기화
-    void PlayerInit() {
-        Stat.ps.Hp = 5;
-        Stat.ps.Stamina = 5;
-        currentHp = MaxHP = Stat.ps.Hp;
-        currentSp = MaxSP = Stat.ps.Stamina;
+    void PlayerInit() { // 매개변수 넣어서 사용하면 Load 시에도 쓸 수 있을 듯
+        // 게임 초기 or Load 시 사용할 듯
+        currentHp = MaxHP = Stat.ps.Hp = 5f;
+        currentSp = MaxSP = Stat.ps.Stamina = 5f;
         
+        // Hp Sp Text 초기화
         textHp.text = currentHp.ToString() + " / " + MaxHP.ToString();
         textSp.text = currentSp.ToString() + " / " + MaxSP.ToString();
+
+        // Kill 초기화
+        textKill.text = countKill.ToString();
     }
 
     // 해당 씬이 실행 되자 마자 hp mp가 적용 되도록 하기 위해 사용
@@ -35,6 +44,12 @@ public class StatsManager : MonoBehaviour
     {
         Stat = GameManager.Instance.GetComponent<PlayerStat>();
         PlayerInit();
+    }
+
+    private void Update()
+    {
+        HpSpText();
+        KillText();
     }
 
     // 체력의 회복과 감소로 사용할 수 있는 함수
@@ -69,5 +84,15 @@ public class StatsManager : MonoBehaviour
         // 현재 체력에 맞게 hp bar의 width를 조절
         imageSp.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300 * currentSp / MaxSP);
         textSp.text = currentSp.ToString() + " / " + MaxSP.ToString();
+    }
+
+
+    public void KillCountDown() {
+        countKill += 1;
+        KillText();
+    }
+    
+    void KillText() {
+        textKill.text = countKill.ToString();
     }
 }

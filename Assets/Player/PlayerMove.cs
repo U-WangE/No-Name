@@ -27,14 +27,10 @@ public class PlayerMove : MonoBehaviour
         keyup = false;
     }
 
-    private void Update()
-    {
-        Jump();
-    }
-
     private void FixedUpdate()
     {
         Move();
+        Jump();
     }
 
 
@@ -50,13 +46,13 @@ public class PlayerMove : MonoBehaviour
 
         // Move speed
         float h = Input.GetAxisRaw("Horizontal");
-        rigid.AddForce(Vector2.right * h * Time.deltaTime * 10f, ForceMode2D.Impulse);
+        rigid.AddForce(Vector2.right * h * Time.fixedDeltaTime  * 10f, ForceMode2D.Impulse);
 
         // Max Speed
         if (rigid.velocity.x > maxSpeed) // Right Max Speed
             rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-        else if (rigid.velocity.x < maxSpeed * (-1)) // Left Max Speed
-            rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
+        else if (rigid.velocity.x < maxSpeed * (-1f)) // Left Max Speed
+            rigid.velocity = new Vector2(maxSpeed * (-1f), rigid.velocity.y);
 
     // Touch로 이동
         // touch up 일때 멈추는 스피드
@@ -70,18 +66,18 @@ public class PlayerMove : MonoBehaviour
         if (InputLeft)
         {
             // move speed
-            rigid.AddForce(Vector2.left * Time.deltaTime * 10f, ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.left * Time.fixedDeltaTime  * 10f, ForceMode2D.Impulse);
 
             // max speed
-            if (rigid.velocity.x < maxSpeed * (-1))
-                rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
+            if (rigid.velocity.x < maxSpeed * (-1f))
+                rigid.velocity = new Vector2(maxSpeed * (-1f), rigid.velocity.y);
         }
 
         // move 이동 관련
         if (InputRight)
         {
             // move speed
-            rigid.AddForce(Vector2.right * Time.deltaTime * 10f, ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.right * Time.fixedDeltaTime  * 10f, ForceMode2D.Impulse);
 
             // max speed
             if (rigid.velocity.x > maxSpeed)
@@ -129,6 +125,7 @@ public class PlayerMove : MonoBehaviour
             InputJump = false;
         }
     }
+
     // Jump 버튼 터치
     public void JumpClick()
     {
@@ -140,12 +137,6 @@ public class PlayerMove : MonoBehaviour
     {
         // 바닥에 닿았는지 인식 -> 바닥에 닿아야 점프 할 수 있다.
         if (collision.gameObject.name == "Floor")
-        {
-            IsJumping = false;
-        }
-        //------------------------------------------------문제---------------------------------------------------
-        //  빠르게 좌우로 왔다갔다하면서 점프를 연타하면 무한 벽타기가 됨...
-        else if (collision.gameObject.tag == "Obstacle")
         {
             IsJumping = false;
         }

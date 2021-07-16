@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,6 @@ public class SettingManager : MonoBehaviour
 
     void Update()
     {
-        ButtonName = EventSystem.current.currentSelectedGameObject.name;
-
         Setting = GameObject.Find("UICanvas").transform.Find("Setting").gameObject;
 
         // Setting 창
@@ -24,23 +23,34 @@ public class SettingManager : MonoBehaviour
                 Setting.SetActive(true);
         }
 
+        try
+        {
+            ButtonName = EventSystem.current.currentSelectedGameObject.name;
 
-        if (ButtonName == "btn_Menu")
-        {// Setting 창 내에 Menu 버튼 클릭
-            GameManager.Instance.TimerActive = false;
-            moveScene();
+            // Setting 창 내에 버튼 클릭
+            if (ButtonName == "btn_Menu")  // MainPage로 이동 버튼
+            {
+                GameManager.Instance.TimerActive = false;
+                moveScene();
+            }
+            else if (ButtonName == "btn_Exit") // 게임 종료 버튼
+            {
+                Application.Quit();
+            }
+            else if (ButtonName == "btn_newGame")  // 새 게임 버튼
+            {
+                GameManager.Instance.TimerActive = true;
+            }
+
+            ActiveMenu();
         }
-        else if (ButtonName == "btn_Exit") // Setting 창 내에 게임 종료 버튼 클릭
-            Application.Quit();
-
-        else if (ButtonName == "btn_newGame")
-            GameManager.Instance.TimerActive = true;
-
-
-        ActiveMenu();
+        catch (NullReferenceException)
+        {
+            return;
+        }
     }
 
-        // MainPage로 돌아가는 버튼 SurvivalPage에서 한정 활성화
+    // MainPage로 돌아가는 버튼 SurvivalPage에서 한정 활성화
     private void ActiveMenu()
     {
         if (Setting.activeSelf)
@@ -48,14 +58,14 @@ public class SettingManager : MonoBehaviour
         else
             GameObject.Find("Timer").GetComponent<TimerManager>().timePause = 1;
     }
-    
+
     // MainPage로 이동
     public void moveScene()
     {
         Setting.SetActive(false);
         SceneManager.LoadScene("MainPage");
     }
-    
+
     // 게임 종료
     public void Quit()
     {
