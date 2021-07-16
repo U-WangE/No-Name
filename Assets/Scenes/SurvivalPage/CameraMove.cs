@@ -18,14 +18,20 @@ public class CameraMove : MonoBehaviour
             float playerX = target.position.x;
             float playerY = target.position.y;
             float playerZ = target.position.z;
-
-            if (playerX < mapMax && playerX > (mapMax * (-1)))
-                // 캐릭터를 화면의 중심에서 아래 1/3 위치하게 놓았다.
-                transform.position = new Vector3(playerX, playerY + 1.6f, playerZ - 50);
-            else if (playerX > 0)
-                transform.position = new Vector3(mapMax, playerY + 1.6f, playerZ - 50);
-            else if (playerX < 0)
-                transform.position = new Vector3(mapMax * (-1f), playerY + 1.6f, playerZ - 50);
+            if (playerX < -5.5f && playerX > -57.5f)
+            {
+                if (playerX < mapMax && playerX > (mapMax * (-1f)))
+                    // 캐릭터를 화면의 중심에서 아래 1/3 위치하게 놓았다.
+                    transform.position = new Vector3(playerX, playerY + 1.6f, playerZ - 50);
+                else if (playerX > 0)
+                    transform.position = new Vector3(mapMax, playerY + 1.6f, playerZ - 50);
+                else if (playerX < 0)
+                    transform.position = new Vector3(mapMax * (-1f), playerY + 1.6f, playerZ - 50);
+            }
+            else if (playerX >= -5.5f)
+                transform.position = new Vector3(-5.5f, playerY + 1.6f, playerZ - 50);
+            else if (playerX <= -57.5f)
+                transform.position = new Vector3(-57.5f, playerY + 1.6f, playerZ - 50);
         }
     }
 }

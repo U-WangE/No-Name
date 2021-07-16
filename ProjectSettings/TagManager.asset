@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Obstacle
   - Setting
+  - Bullet
+  - Monster
   layers:
   - Default
   - TransparentFX
