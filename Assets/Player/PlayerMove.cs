@@ -37,7 +37,7 @@ public class PlayerMove : MonoBehaviour
     // 이동 관련
     void Move()
     {
-    // Keyboard로 이동
+        // Keyboard로 이동
         // button up 일때 멈추는 스피드
         if (Input.GetButtonUp("Horizontal"))
         {
@@ -46,7 +46,7 @@ public class PlayerMove : MonoBehaviour
 
         // Move speed
         float h = Input.GetAxisRaw("Horizontal");
-        rigid.AddForce(Vector2.right * h * Time.fixedDeltaTime  * 10f, ForceMode2D.Impulse);
+        rigid.AddForce(Vector2.right * h * Time.fixedDeltaTime * 10f, ForceMode2D.Impulse);
 
         // Max Speed
         if (rigid.velocity.x > maxSpeed) // Right Max Speed
@@ -54,7 +54,7 @@ public class PlayerMove : MonoBehaviour
         else if (rigid.velocity.x < maxSpeed * (-1f)) // Left Max Speed
             rigid.velocity = new Vector2(maxSpeed * (-1f), rigid.velocity.y);
 
-    // Touch로 이동
+        // Touch로 이동
         // touch up 일때 멈추는 스피드
         if (keyup)
         {
@@ -66,7 +66,7 @@ public class PlayerMove : MonoBehaviour
         if (InputLeft)
         {
             // move speed
-            rigid.AddForce(Vector2.left * Time.fixedDeltaTime  * 10f, ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.left * Time.fixedDeltaTime * 10f, ForceMode2D.Impulse);
 
             // max speed
             if (rigid.velocity.x < maxSpeed * (-1f))
@@ -77,7 +77,7 @@ public class PlayerMove : MonoBehaviour
         if (InputRight)
         {
             // move speed
-            rigid.AddForce(Vector2.right * Time.fixedDeltaTime  * 10f, ForceMode2D.Impulse);
+            rigid.AddForce(Vector2.right * Time.fixedDeltaTime * 10f, ForceMode2D.Impulse);
 
             // max speed
             if (rigid.velocity.x > maxSpeed)
@@ -133,12 +133,27 @@ public class PlayerMove : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         // 바닥에 닿았는지 인식 -> 바닥에 닿아야 점프 할 수 있다.
-        if (collision.gameObject.name == "Floor")
-        {
+        if (other.gameObject.name == "Floor")
             IsJumping = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // 몬스터와 부딪혔을 때
+        if (other.name == "Monster_A")
+        {
+            KnockBack(other.transform.position);
         }
+    }
+
+    void KnockBack(Vector2 pos)
+    {
+        // 반작용. 플레이어의 포지션 x값에서  충돌체의 포지션 x값을 뺀 값이  0보다 크다면 1 작다면 -1
+        // 즉 부딪힌 목표물보다 왼쪽에서 맞았으면 왼쪽에서 튕겨나감. 반대는 오른쪽
+        int reaction = transform.position.x - pos.x > 0 ? 1 : -1;
+        rigid.AddForce(new Vector2(reaction, 1) * 8f, ForceMode2D.Impulse);
     }
 }
