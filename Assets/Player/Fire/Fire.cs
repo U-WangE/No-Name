@@ -9,6 +9,7 @@ public class Fire : MonoBehaviour
     public GunJoyStick gunJoyStick;
     Quaternion quaternion;
     Vector3 vec;
+    
 
     bool charging = false; // 딜레이 중인지 아닌지 판단
     float time = 0.5f; // 발사 딜레이

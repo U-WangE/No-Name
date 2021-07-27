@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StatsManager : MonoBehaviour
+public class PlayerStatsManager : MonoBehaviour
 {
     [SerializeField] Text textHp;
     [SerializeField] Text textSp;
@@ -12,7 +12,7 @@ public class StatsManager : MonoBehaviour
 
     [SerializeField] Text textKill;
 
-    PlayerStat Stat;
+    PlayerStat Player;
 
     // 최대 Hp Sp  
     static float MaxHP = 5f;
@@ -28,8 +28,8 @@ public class StatsManager : MonoBehaviour
     // player stat 초기화
     void PlayerInit() { // 매개변수 넣어서 사용하면 Load 시에도 쓸 수 있을 듯
         // 게임 초기 or Load 시 사용할 듯
-        currentHp = MaxHP = Stat.ps.Hp = 5f;
-        currentSp = MaxSP = Stat.ps.Stamina = 5f;
+        currentHp = MaxHP = Player.stats.Hp = 5f;
+        currentSp = MaxSP = Player.stats.Stamina = 5f;
         
         // Hp Sp Text 초기화
         textHp.text = currentHp.ToString() + " / " + MaxHP.ToString();
@@ -42,7 +42,7 @@ public class StatsManager : MonoBehaviour
     // 해당 씬이 실행 되자 마자 hp mp가 적용 되도록 하기 위해 사용
     private void Start()
     {
-        Stat = GameManager.Instance.GetComponent<PlayerStat>();
+        Player = GameManager.Instance.GetComponent<PlayerStat>();
         PlayerInit();
     }
 
@@ -61,6 +61,11 @@ public class StatsManager : MonoBehaviour
             // 현재 체력 + 회복한 체력 > 최대 체력인 경우
             if (currentHp > MaxHP)
                 currentHp = MaxHP;
+            
+            // 현재 체력 == 0 player 사망
+            if (currentHp == 0) {
+                HpZero();
+            }
         }
 
         if (currentSp <= MaxSP)
@@ -86,12 +91,20 @@ public class StatsManager : MonoBehaviour
         textSp.text = currentSp.ToString() + " / " + MaxSP.ToString();
     }
 
+    // Hp가 Zero가 되었을 때 Setting 메뉴를 연다.
+    void HpZero()
+    {
+        Destroy(GameObject.Find("Player"));
+        GameObject.Find("UICanvas").transform.Find("Setting").gameObject.SetActive(true);
+    }
 
+    // kill한 몬스터 수 계산
     public void KillCountDown() {
         countKill += 1;
         KillText();
     }
     
+    // kill한 몬스터 수에 따라 text 갱신
     void KillText() {
         textKill.text = countKill.ToString();
     }

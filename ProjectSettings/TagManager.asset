@@ -18,13 +18,13 @@ TagManager:
   - Minimap
   - Obstacle
   - Platform
+  - Monster
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - MonsterZone
+  - Floor
+  - Background
   - 
   - 
   - 
